@@ -19,7 +19,8 @@ function Homepage() {
             'Authorization': 'Token 5451c2b730af150677e5afd547ba70fe626a5d8c',
           };
 
-        fetch(`https://api.quiverquant.com/beta/live/congresstrading`)
+        // fetch('https://api.quiverquant.com/beta/live/congresstrading',  { headers })
+        fetch('/api/live/congresstrading', { headers })
             .then(response => {
                 if (!response.ok) {
                     throw new Error(`${response.status}: ${response.statusText}`);
@@ -28,7 +29,7 @@ function Homepage() {
                 }
             })
             .then((jsonifiedResponse) => {
-                const action = getRecentTradesSuccess(jsonifiedResponse.results)
+                const action = getRecentTradesSuccess(jsonifiedResponse)
                 dispatch(action);
             })
             .catch((error) => {
