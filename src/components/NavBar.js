@@ -4,8 +4,8 @@ import React from "react";
 function Navbar() {
     return (
         <React.Fragment>
-            <div className="flex mb-12 justify-between">
-                <h1> Help Queue</h1>
+            <div className="flex mb-12 justify-between bg-slate-600">
+                <h1> Stock Tracker</h1>
               
                     <p>
                         <Link to="/">Home</Link>

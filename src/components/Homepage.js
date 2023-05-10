@@ -45,14 +45,19 @@ function Homepage() {
     } else if (!isLoaded) {
         return <h1>...Loading...</h1>;
     } else {
+        const firstTenTrades = recentTrades.slice(0, 10);
         return (
             <React.Fragment>
                 <h1>Most Recent Trades</h1>
                 <ul>
-                    {recentTrades.map((trade, index) =>
+                    {firstTenTrades.map((trade, index) =>
                         <li key={index}>
-                            <h3>{trade.ReportDate}</h3>
+                            <h3>{trade.Representative}</h3>
+                            <p>{trade.House}</p>
+                            <p>{trade.Transaction}</p>
                             <p>{trade.Ticker}</p>
+                            <p>{trade.Range}</p>
+                            <br></br>
                         </li>
                     )}
                 </ul>
