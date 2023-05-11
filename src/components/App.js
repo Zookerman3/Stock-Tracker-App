@@ -1,8 +1,8 @@
 import SignIn from "./SignIn";
-import Homepage from "./Homepage";
 import Navbar from "./NavBar";
 import '../App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import TradeControl from "./TradeControl";
 
 function App() {
     return (
@@ -10,7 +10,7 @@ function App() {
             <Navbar />
             <Routes>
                 <Route path="/sign-in" element={<SignIn />} />
-                <Route path="/" element={<Homepage />} />
+                <Route path="/" element={<TradeControl />} />
             </Routes>
         </Router>
     );
