@@ -1,8 +1,8 @@
 import React from 'react';
 
-function TradeDetail({ trade }) {
+function TradeDetail({ trade, className }) {
   return (
-    <div>
+    <div className={`absolute bg-white p-4 shadow-md ${className}`}>
       <h2>Trade Details</h2>
       <p><strong>Report Date:</strong> {trade.ReportDate}</p>
       <p><strong>Transaction Date:</strong> {trade.TransactionDate}</p>
