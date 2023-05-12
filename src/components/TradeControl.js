@@ -40,7 +40,7 @@ function TradeControl() {
 
     const handleTradeClick = (trade, event) => {
         if (selectedTrade && selectedTrade.trade === trade) {
-            setSelectedTrade(null); 
+            setSelectedTrade(null);
         } else {
             setSelectedTrade({ trade, position: { top: event.clientY, left: event.clientX } });
         }
@@ -53,18 +53,27 @@ function TradeControl() {
     } else if (!isLoaded) {
         return <h1 className='mt-20'>...Loading...</h1>;
     } else {
-        const firstTenTrades = recentTrades.slice(0, 10);
-        return (
-            <div className='mt-20 bg-slate-800 text-slate-200'>
-                <h1 className='pt-5'>Most Recent Trades</h1>
-                <ul>
+        const firstTenTrades = recentTrades.slice(0, 20);
+        return (<div className='mt-20 bg-slate-800 text-slate-200'>
+            <h1 className='pt-5 pb-5'>Most Recent Trades</h1>
+            <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
+                <thead className='text-xs uppercase bg-slate-700  text-slate-300'>
+                    <tr>
+                        <th className='px-6 py-3'>Representative</th>
+                        <th className='px-6 py-3'>House</th>
+                        <th className='px-6 py-3'>Transaction</th>
+                        <th className='px-6 py-3'>Ticker</th>
+                        <th className='px-6 py-3'>Range</th>
+                    </tr>
+                </thead>
+                <tbody>
                     {firstTenTrades.map((trade, index) => (
-                        <li key={index} onClick={event => handleTradeClick(trade, event)}>
-                            <h3>{trade.Representative}</h3>
-                            <p>{trade.House}</p>
-                            <p>{trade.Transaction}</p>
-                            <p>{trade.Ticker}</p>
-                            <p>{trade.Range}</p>
+                        <tr key={index} onClick={event => handleTradeClick(trade, event)} className='bg-slate-800 border-b dark:border-gray-700 text-slate-200'>
+                            <td className='px-6 py-4 font-medium whitespace-nowrap text-slate-200'>{trade.Representative}</td>
+                            <td className='px-6 py-4'>{trade.House}</td>
+                            <td className='px-6 py-4'>{trade.Transaction}</td>
+                            <td className='px-6 py-4'>{trade.Ticker}</td>
+                            <td className='px-6 py-4'>{trade.Range}</td>
                             {selectedTrade && selectedTrade.trade === trade && (
                                 <TradeDetail
                                     trade={selectedTrade.trade}
@@ -72,11 +81,12 @@ function TradeControl() {
                                     style={{ top: selectedTrade.position.top, left: selectedTrade.position.left }}
                                 />
                             )}
-                            <br></br>
-                        </li>
+                        </tr>
                     ))}
-                </ul>
-            </div>
+                </tbody>
+            </table>
+            <br />
+        </div>
         );
     }
 }
