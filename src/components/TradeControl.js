@@ -12,6 +12,7 @@ const initialState = {
 function TradeControl() {
     const [state, dispatch] = useReducer(recentTradesReducer, initialState);
     const [selectedTrade, setSelectedTrade] = useState(null);
+    const [tradeDetailsVisible, setTradeDetailsVisible] = useState(false);
 
     useEffect(() => {
         const headers = {
@@ -38,12 +39,9 @@ function TradeControl() {
             });
     }, []);
 
-    const handleTradeClick = (trade, event) => {
-        if (selectedTrade && selectedTrade.trade === trade) {
-            setSelectedTrade(null);
-        } else {
-            setSelectedTrade({ trade, position: { top: event.clientY, left: event.clientX } });
-        }
+    const handleTradeClick = (trade) => {
+        setSelectedTrade(trade);
+        setTradeDetailsVisible(!tradeDetailsVisible);
     };
 
     const { error, isLoaded, recentTrades } = state;
@@ -54,39 +52,47 @@ function TradeControl() {
         return <h1 className='mt-20'>...Loading...</h1>;
     } else {
         const firstTenTrades = recentTrades.slice(0, 20);
-        return (<div className='mt-20 bg-slate-800 text-slate-200'>
-            <h1 className='pt-5 pb-5'>Most Recent Trades</h1>
-            <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
-                <thead className='text-xs uppercase bg-slate-700  text-slate-300'>
-                    <tr>
-                        <th className='px-6 py-3'>Representative</th>
-                        <th className='px-6 py-3'>House</th>
-                        <th className='px-6 py-3'>Transaction</th>
-                        <th className='px-6 py-3'>Ticker</th>
-                        <th className='px-6 py-3'>Range</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {firstTenTrades.map((trade, index) => (
-                        <tr key={index} onClick={event => handleTradeClick(trade, event)} className='bg-slate-800 border-b dark:border-gray-700 text-slate-200'>
-                            <td className='px-6 py-4 font-medium whitespace-nowrap text-slate-200'>{trade.Representative}</td>
-                            <td className='px-6 py-4'>{trade.House}</td>
-                            <td className='px-6 py-4'>{trade.Transaction}</td>
-                            <td className='px-6 py-4'>{trade.Ticker}</td>
-                            <td className='px-6 py-4'>{trade.Range}</td>
-                            {selectedTrade && selectedTrade.trade === trade && (
-                                <TradeDetail
-                                    trade={selectedTrade.trade}
-                                    className='absolute bg-slate-600 text-slate-200 p-4 shadow-md'
-                                    style={{ top: selectedTrade.position.top, left: selectedTrade.position.left }}
-                                />
-                            )}
+        return (
+            <div className='mt-20 bg-slate-800 text-slate-200'>
+                <h1 className='pt-5 pb-5'>Most Recent Trades</h1>
+                <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
+                    <thead className='text-xs uppercase bg-slate-700  text-slate-300'>
+                        <tr>
+                            <th className='px-6 py-3'>Representative</th>
+                            <th className='px-6 py-3'>House</th>
+                            <th className='px-6 py-3'>Transaction</th>
+                            <th className='px-6 py-3'>Ticker</th>
+                            <th className='px-6 py-3'>Range</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-            <br />
-        </div>
+                    </thead>
+                    <tbody>
+                        {firstTenTrades.map((trade, index) => (
+                            <React.Fragment key={index}>
+                                <tr
+                                    onClick={() => handleTradeClick(trade)}
+                                    className='bg-slate-800 border-b dark:border-gray-700 text-slate-200'
+                                >
+                                    <td className='px-6 py-4 font-medium whitespace-nowrap text-slate-200'>
+                                        {trade.Representative}
+                                    </td>
+                                    <td className='px-6 py-4'>{trade.House}</td>
+                                    <td className='px-6 py-4'>{trade.Transaction}</td>
+                                    <td className='px-6 py-4'>{trade.Ticker}</td>
+                                    <td className='px-6 py-4'>{trade.Range}</td>
+                                </tr>
+                                {tradeDetailsVisible && selectedTrade === trade && (
+                                    <tr>
+                                        <td colSpan={5}>
+                                            <TradeDetail trade={selectedTrade} />
+                                        </td>
+                                    </tr>
+                                )}
+                            </React.Fragment>
+                        ))}
+                    </tbody>
+                </table>
+                <br />
+            </div>
         );
     }
 }
