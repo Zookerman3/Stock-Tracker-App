@@ -23,8 +23,8 @@ function SignIn() {
 
     function doSignIn(event) {
         event.preventDefault();
-        const email = event.target.signinEmail.value;
-        const password = event.target.signinPassword.value;
+        const email = event.target.email.value;
+        const password = event.target.password.value;
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 setSignInSuccess(`You've successfully signed in as ${userCredential.user.email}!`)
@@ -91,7 +91,7 @@ function SignIn() {
             <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
                 <div className="max-w-md w-full px-6 py-4 mt-20 bg-white shadow-md rounded-lg">
                     <h1 className="text-center mb-6 text-2xl font-bold">Sign In</h1>
-                    {signUpSuccess}
+                    {signInSuccess}
                     <form onSubmit={doSignIn}>
                         <div className="mb-4">
                             <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-700">
