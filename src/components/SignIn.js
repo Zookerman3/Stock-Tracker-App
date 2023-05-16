@@ -44,7 +44,7 @@ function SignIn() {
     //         });
     // }
 
-        if (isSignInVisible === true) { // Render sign-in form
+        if (isSignInVisible === true) {
             return (
                 <React.Fragment>
                     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
@@ -116,7 +116,12 @@ function SignIn() {
                                 <div className="flex items-center justify-between">
                                     <button
                                         className="text-sm text-gray-600 underline hover:text-gray-900"
-                                        onClick={() => setIsSignInVisible(!isSignInVisible)} // Toggle the value of isSignInVisible
+                                        onClick={(event) => {
+                                            event.preventDefault();
+                                            setIsSignInVisible(!isSignInVisible)} 
+                                        }
+                                            // Toggle the value of isSignInVisible
+                                        type="button"
                                     >
                                         Already registered?
                                     </button>
@@ -133,8 +138,6 @@ function SignIn() {
                 </React.Fragment>
             );
         }
-
-        
     // } else (auth.currentUser !== null) {
     //     return (
     //         <React.Fragment>
