@@ -54,6 +54,7 @@ function TradeControl() {
         const firstTenTrades = recentTrades.slice(0, 20);
         return (
             <div className='mt-20 bg-slate-800 text-slate-200'>
+                
                 <h1 className='pt-5 pb-5'>Most Recent Trades</h1>
                 <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
                     <thead className='text-xs uppercase bg-slate-700  text-slate-300'>

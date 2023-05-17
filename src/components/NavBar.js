@@ -18,7 +18,7 @@ function Navbar() {
                         <p>
                             <Link to="/sign-in">Sign In</Link>
                         </p>
-                        <p>Account</p>
+                        <p><Link to="/search">Search</Link></p>
                     </div>
                 </div>
             </div>
