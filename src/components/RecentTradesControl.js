@@ -2,8 +2,8 @@ import React, { useEffect, useReducer, useState } from 'react';
 import recentTradesReducer from '../reducers/recent-trades-reducer';
 import { getRecentTradesSuccess, getRecentTradesFailure } from '../actions/index';
 import TradeDetail from './TradeDetail';
-import { db } from '../firebase';
 import { collection, addDoc } from "firebase/firestore";
+import { db, auth } from './../firebase.js';
 
 const initialState = {
     isLoaded: false,
@@ -47,7 +47,10 @@ function RecentTradesControl() {
     };
 
     const handleAddingTradeToDB = async (tradeData) => {
-        await addDoc(collection(db, "trades"), tradeData);
+        console.log(tradeData);
+        const userId = auth.currentUser.uid
+        const tradeDataWithUser = {...tradeData, userId}
+        await addDoc(collection(db, "trades"), tradeDataWithUser);
     }
 
     const { error, isLoaded, recentTrades } = state;
@@ -59,6 +62,7 @@ function RecentTradesControl() {
     } else {
         const firstTenTrades = recentTrades.slice(0, 20);
         return (
+
             <div className='mt-20 bg-slate-800 text-slate-200'>
                 
                 <h1 className='pt-5 pb-5'>Most Recent Trades</h1>

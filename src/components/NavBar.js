@@ -19,6 +19,7 @@ function Navbar() {
                             <Link to="/sign-in">Sign In</Link>
                         </p>
                         <p><Link to="/search">Search</Link></p>
+                        <p><Link to="/account">Account</Link></p>
                     </div>
                 </div>
             </div>
