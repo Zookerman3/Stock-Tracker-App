@@ -1,14 +1,14 @@
 import * as c from '../actions/ActionTypes';
 
-const tradeByTickerReducer = (state, action) => {
+const tradeBySenateTickerReducer = (state, action) => {
     switch (action.type) {
-        case c.GET_TRADE_BY_TICKER_SUCCESS:
+        case c.GET_TRADE_BY_SENATE_TICKER_SUCCESS:
             return {
                 ...state,
                 isLoaded: true,
-                tradeByTicker: action.tradeByTicker
+                tradeByHouseTicker: action.tradeByHouseTicker
             };
-        case c.GET_TRADE_BY_TICKER_FAILURE:
+        case c.GET_TRADE_BY_SENATE_TICKER_FAILURE:
             return {
                 ...state,
                 isLoaded: true,
@@ -19,4 +19,4 @@ const tradeByTickerReducer = (state, action) => {
     }
 };
 
-export default tradeByTickerReducer;
+export default tradeBySenateTickerReducer;
