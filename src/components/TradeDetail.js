@@ -1,6 +1,6 @@
 import React from 'react';
 
-function TradeDetail({ trade, className }) {
+function TradeDetail({ trade, className, onAddingTradeToFB }) {
   return (
     <div className={`absolute bg-slate-500 p-4 shadow-md text-black ${className}`}>
       <h2 className='font-bold'>Trade Details:</h2>
@@ -12,6 +12,7 @@ function TradeDetail({ trade, className }) {
       <p><strong>Amount:</strong> {trade.Amount}</p>
       <p><strong>House:</strong> {trade.House}</p>
       <p><strong>Range:</strong> {trade.Range}</p>
+      <button onClick={onAddingTradeToFB}>Add to Firebase</button>
     </div>
   );
 }

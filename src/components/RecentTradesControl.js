@@ -2,6 +2,8 @@ import React, { useEffect, useReducer, useState } from 'react';
 import recentTradesReducer from '../reducers/recent-trades-reducer';
 import { getRecentTradesSuccess, getRecentTradesFailure } from '../actions/index';
 import TradeDetail from './TradeDetail';
+import { db } from '../firebase';
+import { collection, addDoc } from "firebase/firestore";
 
 const initialState = {
     isLoaded: false,
@@ -9,7 +11,7 @@ const initialState = {
     error: null,
 };
 
-function TradeControl() {
+function RecentTradesControl() {
     const [state, dispatch] = useReducer(recentTradesReducer, initialState);
     const [selectedTrade, setSelectedTrade] = useState(null);
     const [tradeDetailsVisible, setTradeDetailsVisible] = useState(false);
@@ -43,6 +45,10 @@ function TradeControl() {
         setSelectedTrade(trade);
         setTradeDetailsVisible(!tradeDetailsVisible);
     };
+
+    const handleAddingTradeToDB = async (tradeData) => {
+        await addDoc(collection(db, "trades"), tradeData);
+    }
 
     const { error, isLoaded, recentTrades } = state;
 
@@ -84,7 +90,7 @@ function TradeControl() {
                                 {tradeDetailsVisible && selectedTrade === trade && (
                                     <tr>
                                         <td colSpan={5}>
-                                            <TradeDetail trade={selectedTrade} />
+                                            <TradeDetail trade={selectedTrade} onAddingTradeToFB={handleAddingTradeToDB}/>
                                         </td>
                                     </tr>
                                 )}
@@ -98,4 +104,4 @@ function TradeControl() {
     }
 }
 
-export default TradeControl;
+export default RecentTradesControl;
