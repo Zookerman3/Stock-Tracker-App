@@ -62,8 +62,7 @@ function RecentTradesControl() {
     } else {
         const firstTenTrades = recentTrades.slice(0, 20);
         return (
-
-            <div className='mt-20 bg-slate-800 text-slate-200'>
+                <div className='mt-28 bg-slate-800 text-slate-200 m-10 p-4 rounded-lg'>
                 
                 <h1 className='pt-5 pb-5'>Most Recent Trades</h1>
                 <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>

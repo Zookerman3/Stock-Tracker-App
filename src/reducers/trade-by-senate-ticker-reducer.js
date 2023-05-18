@@ -6,7 +6,7 @@ const tradeBySenateTickerReducer = (state, action) => {
             return {
                 ...state,
                 isLoaded: true,
-                tradeByHouseTicker: action.tradeByHouseTicker
+                tradeBySenateTicker: action.tradeBySenateTicker
             };
         case c.GET_TRADE_BY_SENATE_TICKER_FAILURE:
             return {

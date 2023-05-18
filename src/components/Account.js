@@ -29,7 +29,7 @@ function Account() {
     return (
         <React.Fragment>
 
-<div className='mt-20 bg-slate-800 text-slate-200 overflow-hidden'>
+<div className='mt-28 bg-slate-800 text-slate-200 m-10 p-4 rounded-lg overflow-hidden '>
                 <div className='mt-5 mb-5'>
                     <h1 className='pt-5 pb-10 inline mr-5 '>Saved Trades</h1>
 
@@ -41,8 +41,7 @@ function Account() {
                             <th className='px-6 py-3'>Representative</th>
                             <th className='px-6 py-3'>Date</th>
                             <th className='px-6 py-3'>Ticker</th>
-                            <th className='px-6 py-3'>Transaction</th>
-                            <th className='px-6 py-3'>Amount</th>
+                            <th className='px-6 py-3'>Purchase / Sale</th>
                             <th className='px-6 py-3'>Range</th>
                             <th className='px-6 py-3'></th>
                         </tr>
@@ -54,13 +53,12 @@ function Account() {
                                     className='bg-slate-800 border-b dark:border-gray-700 text-slate-200'
                                 >
                                     <td className='px-6 py-4 font-medium whitespace-nowrap text-slate-200'>
-                                        {data.Representative}
+                                    {data.Representative || data.Senator}
                                     </td>
-                                    <td className='px-6 py-4'>{data.Date}</td>
+                                    <td className='px-6 py-4'>{data.Date || data.ReportDate}</td>
                                     <td className='px-6 py-4'>{data.Ticker}</td>
-                                    <td className='px-6 py-4'>{data.Representative}</td>
                                     <td className='px-6 py-4'>{data.Transaction}</td>
-                                    <td className='px-6 py-4'>{data.Amount}</td>
+                                    
                                     <td className='px-6 py-4'>{data.Range}</td>
                                 </tr>
                             </React.Fragment>

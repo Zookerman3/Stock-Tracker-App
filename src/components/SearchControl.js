@@ -16,6 +16,9 @@ function SearchControl() {
     const [state, dispatch] = useReducer(tradeByHouseTickerReducer, initialState);
     const [ticker, setTicker] = useState('');
     const [addedtoFBmessage, setAddedtoFBMessage] = useState('');
+    const [stateSenate, dispatchSenate] = useReducer(tradeBySenateTickerReducer, initialState);
+
+    // const url = `/api/historical/housetrading/${ticker}`;
 
     function fetchTrades() {
         const headers = {
@@ -24,40 +27,30 @@ function SearchControl() {
             'Authorization': 'Token 5451c2b730af150677e5afd547ba70fe626a5d8c',
         };
 
-        // const url = `/api/historical/housetrading/${ticker}`;
-
-        fetch(`/api/historical/housetrading/${ticker}`, { headers })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`${response.status}: ${response.statusText}`);
-                } else {
-                    return response.json();
+        Promise.all([
+            fetch(`/api/historical/housetrading/${ticker}`, { headers }),
+            fetch(`/api/historical/senatetrading/${ticker}`, { headers })
+        ])
+            .then(([houseResponse, senateResponse]) => {
+                if (!houseResponse.ok) {
+                    throw new Error(`${houseResponse.status}: ${houseResponse.statusText}`);
                 }
+                if (!senateResponse.ok) {
+                    throw new Error(`${senateResponse.status}: ${senateResponse.statusText}`);
+                }
+                return Promise.all([houseResponse.json(), senateResponse.json()]);
             })
-            .then(jsonifiedResponse => {
-                const action = getTradeByHouseTickerSuccess(jsonifiedResponse);
-                dispatch(action);
+            .then(([houseJsonifiedResponse, senateJsonifiedResponse]) => {
+                const houseAction = getTradeByHouseTickerSuccess(houseJsonifiedResponse);
+                const senateAction = getTradeBySenateTickerSuccess(senateJsonifiedResponse);
+                dispatch(houseAction);
+                dispatchSenate(senateAction);
             })
             .catch(error => {
-                const action = getTradeByHouseTickerFailure(error.message);
-                dispatch(action);
-            });
-
-        fetch(`/api/historical/senatetrading/${ticker}`, { headers })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`${response.status}: ${response.statusText}`);
-                } else {
-                    return response.json();
-                }
-            })
-            .then(jsonifiedResponse => {
-                const action = getTradeBySenateTickerSuccess(jsonifiedResponse);
-                dispatch(action);
-            })
-            .catch(error => {
-                const action = getTradeBySenateTickerFailure(error.message);
-                dispatch(action);
+                const houseAction = getTradeByHouseTickerFailure(error.message);
+                const senateAction = getTradeBySenateTickerFailure(error.message);
+                dispatch(houseAction);
+                dispatchSenate(senateAction);
             });
     }
 
@@ -68,19 +61,20 @@ function SearchControl() {
         await addDoc(collection(db, "trades"), tradeDataWithUser);
     }
 
-    const { error, isLoaded, tradeByHouseTicker, tradeBySenateTicker } = state;
+    const { error, isLoaded, tradeByHouseTicker } = state;
+    const { tradeBySenateTicker } = stateSenate;
 
     if (!isLoaded) {
         return (
             <React.Fragment>
-                <div className="mt-20">
-                    <input
+                <div className="mt-20 flex">
+                    <input className=' ml-5 mt-5 px-3 py-2 border-gray-300 rounded-md focus:outline-none focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 border border-slate'
                         type="text"
                         value={ticker}
                         onChange={(e) => setTicker(e.target.value)}
                         placeholder="Enter ticker"
                     />
-                    <button onClick={fetchTrades}>Search</button>
+                    <button className=' mt-5 inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md active:bg-gray-900' onClick={fetchTrades}>Search</button>
                 </div>
             </React.Fragment>
         );
@@ -166,7 +160,7 @@ function SearchControl() {
             </div>
         )
 
-        
+
     } else {
         return (
 
@@ -175,84 +169,92 @@ function SearchControl() {
                     <h1 className='pt-5 pb-10 inline mr-5 '>Most Recent Trades</h1>
                     <h1 className='pt-5 pb-5 inline'>{addedtoFBmessage}</h1>
                 </div>
-
-                <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
-                    <thead className='text-xs uppercase bg-slate-700 text-slate-300'>
-                        <tr>
-                            <th className='px-6 py-3'>Representative</th>
-                            <th className='px-6 py-3'>Date</th>
-                            <th className='px-6 py-3'>Ticker</th>
-                            <th className='px-6 py-3'>Transaction</th>
-                            <th className='px-6 py-3'>Amount</th>
-                            <th className='px-6 py-3'>Range</th>
-                            <th className='px-6 py-3'></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {tradeByHouseTicker.map((trade, index) => (
-                            <React.Fragment key={index}>
-                                <tr
-                                    className='bg-slate-800 border-b dark:border-gray-700 text-slate-200'
-                                >
-                                    <td className='px-6 py-4 font-medium whitespace-nowrap text-slate-200'>
-                                        {trade.Representative}
-                                    </td>
-                                    <td className='px-6 py-4'>{trade.Date}</td>
-                                    <td className='px-6 py-4'>{trade.Ticker}</td>
-                                    <td className='px-6 py-4'>{trade.Transaction}</td>
-                                    <td className='px-6 py-4'>{trade.Amount}</td>
-                                    <td className='px-6 py-4'>{trade.Range}</td>
-                                    <td className='px-6 py-4'><button onClick={() => {
-                                        handleAddingTradeToDB(trade);
-                                        setAddedtoFBMessage('Added Trade to Account');
-                                    }}
-                                        className='inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md active:bg-gray-900'>Add</button></td>
+                <div className='flex mt-4'>
+                    <div className='w-1/2 pr-4 flex-shrink-0'>
+                        <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
+                            <thead className='text-xs uppercase bg-slate-700 text-slate-300'>
+                                <tr>
+                                    <th className='px-6 py-3'>Representative</th>
+                                    <th className='px-6 py-3'>Date</th>
+                                    <th className='px-6 py-3'>Ticker</th>
+                                    <th className='px-6 py-3'>Transaction</th>
+                                    <th className='px-6 py-3'>Amount</th>
+                                    <th className='px-6 py-3'>Range</th>
+                                    <th className='px-6 py-3'></th>
                                 </tr>
-                            </React.Fragment>
-                        ))}
-                    </tbody>
-                </table>
+                            </thead>
+                            <tbody>
+                                {tradeByHouseTicker.map((trade, index) => (
+                                    <React.Fragment key={index}>
+                                        <tr
+                                            className='bg-slate-800 border-b dark:border-gray-700 text-slate-200'
+                                        >
+                                            <td className='px-6 py-4 font-medium whitespace-nowrap text-slate-200'>
+                                                {trade.Representative}
+                                            </td>
+                                            <td className='px-6 py-'>{trade.Date}</td>
+                                            <td className='px-6 py-4'>{trade.Ticker}</td>
+                                            <td className='px-6 py-4'>{trade.Transaction}</td>
+                                            <td className='px-6 py-4'>{trade.Amount}</td>
+                                            <td className='px-6 py-4'>{trade.Range}</td>
+                                            <td className='px-6 py-4'><button onClick={() => {
+                                                handleAddingTradeToDB(trade);
+                                                setAddedtoFBMessage('Added Trade to Account');
+                                            }}
+                                                className='inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md active:bg-gray-900'>Add</button></td>
+                                        </tr>
+                                    </React.Fragment>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <div className='w-1/2 pl-4 overflow-x-auto'>
+                        <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
+                            <thead className='text-xs uppercase bg-slate-700 text-slate-300'>
+                                <tr>
+                                    <th className='px-6 py-3'>Senator</th>
+                                    <th className='px-6 py-3'>Date</th>
+                                    <th className='px-6 py-3'>Ticker</th>
+                                    <th className='px-6 py-3'>Transaction</th>
+                                    <th className='px-6 py-3'>Amount</th>
+                                    <th className='px-6 py-3'>Range</th>
+                                    <th className='px-6 py-3'></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {tradeBySenateTicker.map((trade, index) => (
+                                    <React.Fragment key={index}>
+                                        <tr
+                                            className='bg-slate-800 border-b dark:border-gray-700 text-slate-200'
+                                        >
+                                            <td className='px-6 py-4 font-medium whitespace-nowrap text-slate-200'>
+                                                {trade.Senator}
+                                            </td>
+                                            <td className='px-6 py-4'>{trade.Date}</td>
+                                            <td className='px-6 py-4'>{trade.Ticker}</td>
+                                            <td className='px-6 py-4'>{trade.Transaction}</td>
+                                            <td className='px-6 py-4'>{trade.Amount}</td>
+                                            <td className='px-6 py-4'>{trade.Range}</td>
+                                            <td className='px-6 py-4'><button onClick={() => {
+                                                handleAddingTradeToDB(trade);
+                                                setAddedtoFBMessage('Added Trade to Account');
+                                            }}
+                                                className='inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md active:bg-gray-900'>Add</button></td>
+                                        </tr>
+                                    </React.Fragment>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <br />
 
-                <table className='w-full text-sm text-left text-gray-500 dark:text-gray-400'>
-                    <thead className='text-xs uppercase bg-slate-700 text-slate-300'>
-                        <tr>
-                            <th className='px-6 py-3'>Representative</th>
-                            <th className='px-6 py-3'>Date</th>
-                            <th className='px-6 py-3'>Ticker</th>
-                            <th className='px-6 py-3'>Transaction</th>
-                            <th className='px-6 py-3'>Amount</th>
-                            <th className='px-6 py-3'>Range</th>
-                            <th className='px-6 py-3'></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {tradeBySenateTicker.map((trade, index) => (
-                            <React.Fragment key={index}>
-                                <tr
-                                    className='bg-slate-800 border-b dark:border-gray-700 text-slate-200'
-                                >
-                                    <td className='px-6 py-4 font-medium whitespace-nowrap text-slate-200'>
-                                        {trade.Representative}
-                                    </td>
-                                    <td className='px-6 py-4'>{trade.Date}</td>
-                                    <td className='px-6 py-4'>{trade.Ticker}</td>
-                                    <td className='px-6 py-4'>{trade.Transaction}</td>
-                                    <td className='px-6 py-4'>{trade.Amount}</td>
-                                    <td className='px-6 py-4'>{trade.Range}</td>
-                                    <td className='px-6 py-4'><button onClick={() => {
-                                        handleAddingTradeToDB(trade);
-                                        setAddedtoFBMessage('Added Trade to Account');
-                                    }}
-                                        className='inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md active:bg-gray-900'>Add</button></td>
-                                </tr>
-                            </React.Fragment>
-                        ))}
-                    </tbody>
-                </table>
+
             </div>
         )
     }
 }
+
 
 export default SearchControl;
