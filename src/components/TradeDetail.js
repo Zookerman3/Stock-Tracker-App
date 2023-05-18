@@ -30,7 +30,7 @@ function TradeDetail({ trade, className, onAddingTradeToFB }) {
               <p><strong>House:</strong> {trade.House}</p>
               <p><strong>Range:</strong> {trade.Range}</p>
               <br></br>
-              <button className='inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md active:bg-gray-900' onClick={() => onAddingTradeToFB(trade)}>Add</button>
+              <button className='inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md hover:bg-white hover:text-gray-900 active:bg-gray-900' onClick={() => onAddingTradeToFB(trade)}>Add</button>
             </div>
           );
     }

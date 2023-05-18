@@ -5,7 +5,7 @@ import logo from '../assets/logo.png';
 function Navbar() {
     return (
         <React.Fragment>
-            <div className="fixed top-0 left-0 pr-10 w-screen flex mb-12 justify-between bg-slate-700 p-4 border-b border-slate-300 h-20">
+            <div className="text-gray-200 fixed top-0 left-0 pr-10 w-screen flex mb-12 justify-between bg-slate-700 p-4 border-b border-slate-300 h-20">
                 <div className="flex items-center pl-10">
                 <img src={logo} alt="Logo" className="max-w-[90px]"/>
                     <h1 className="text-2xl">Stock Tracker</h1>

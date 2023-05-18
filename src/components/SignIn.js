@@ -132,7 +132,7 @@ function SignIn() {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md active:bg-gray-900"
+                                    className="inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md hover:bg-white hover:text-gray-900 active:bg-gray-900"
                                 >
                                     Register
                                 </button>
@@ -142,7 +142,7 @@ function SignIn() {
                     <br></br>
                     {signOutSuccess}
                     <br />
-                    <button onClick={doSignOut}>Sign out</button>
+                    <button className="inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md hover:bg-white hover:text-gray-900 active:bg-gray-900" onClick={doSignOut}>Sign out</button>
                 </div>
             </React.Fragment>
         );

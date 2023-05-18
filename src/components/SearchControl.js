@@ -74,7 +74,7 @@ function SearchControl() {
                         onChange={(e) => setTicker(e.target.value)}
                         placeholder="Enter ticker"
                     />
-                    <button className=' mt-5 inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md active:bg-gray-900' onClick={fetchTrades}>Search</button>
+                    <button className='mt-5 inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md hover:bg-white hover:text-gray-900 active:bg-gray-900' onClick={fetchTrades}>Search</button>
                 </div>
             </React.Fragment>
         );
@@ -151,7 +151,7 @@ function SearchControl() {
                                         handleAddingTradeToDB(trade);
                                         setAddedtoFBMessage('Added Trade to Account');
                                     }}
-                                        className='inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md active:bg-gray-900'>Add</button></td>
+                                        className='inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md hover:bg-white hover:text-gray-900 active:bg-gray-900'>Add</button></td>
                                 </tr>
                             </React.Fragment>
                         ))}
@@ -201,7 +201,7 @@ function SearchControl() {
                                                 handleAddingTradeToDB(trade);
                                                 setAddedtoFBMessage('Added Trade to Account');
                                             }}
-                                                className='inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md active:bg-gray-900'>Add</button></td>
+                                                className='inline-flex items-center px-4 py-2 ml-4 text-xs font-semibold tracking-widest text-white uppercase transition duration-150 ease-in-out bg-gray-900 border border-transparent rounded-md hover:bg-white hover:text-gray-900 active:bg-gray-900'>Add</button></td>
                                         </tr>
                                     </React.Fragment>
                                 ))}
