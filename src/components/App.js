@@ -3,7 +3,7 @@ import Navbar from "./NavBar";
 import SearchControl from "./SearchControl";
 import Account from "./Account";
 import '../App.css';
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import RecentTradesControl from "./RecentTradesControl";
 
 function App() {
