@@ -20,7 +20,7 @@ function RecentTradesControl() {
         const headers = {
             'Accept': 'application/json',
             'X-CSRFToken': 'TyTJwjuEC7VV7mOqZ622haRaaUr0x0Ng4nrwSRFKQs7vdoBcJlK9qjAS69ghzhFu',
-            'Authorization': 'Token 5451c2b730af150677e5afd547ba70fe626a5d8c',
+            'Authorization': `Token ${process.env.REACT_APP_API_KEY}`,
         };
 
         fetch('/api/live/congresstrading', { headers })
